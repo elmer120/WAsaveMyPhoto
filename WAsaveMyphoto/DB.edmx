@@ -1,0 +1,372 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SaveMyPhotoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Dispositivi">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Marca" Type="nvarchar" MaxLength="30" />
+          <Property Name="Modello" Type="nvarchar" MaxLength="30" />
+          <Property Name="VersioneAndroid" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="SpazioLibero" Type="int" Nullable="false" />
+          <Property Name="FKUtente" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errori trovati durante la generazione:
+avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'SaveMyPhoto.dbo.Foto'. La chiave è stata dedotta e la definizione è stata creata come tabella/visualizzazione di sola lettura.-->
+        <EntityType Name="Foto">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Flash" Type="bit" />
+        </EntityType>
+        <EntityType Name="Media">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Album" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="DataAcquisizione" Type="datetime" />
+          <Property Name="Dimensione" Type="int" Nullable="false" />
+          <Property Name="Percorso" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Altezza" Type="int" />
+          <Property Name="Larghezza" Type="int" />
+          <Property Name="Formato" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="Orientamento" Type="char" MaxLength="1" />
+          <Property Name="GpsLat" Type="decimal" Precision="10" Scale="6" />
+          <Property Name="GpsLong" Type="decimal" Precision="10" Scale="6" />
+          <Property Name="Dispositivo" Type="bit" />
+          <Property Name="FKDispositivo" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Utenti">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NomeUtente" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="DataNascita" Type="datetime" />
+          <Property Name="Mail" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Password" Type="nchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <!--Errori trovati durante la generazione:
+avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'SaveMyPhoto.dbo.Video'. La chiave è stata dedotta e la definizione è stata creata come tabella/visualizzazione di sola lettura.-->
+        <EntityType Name="Video">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Durata" Type="int" />
+        </EntityType>
+        <Association Name="FKDispositiviUtenti">
+          <End Role="Utenti" Type="Self.Utenti" Multiplicity="1" />
+          <End Role="Dispositivi" Type="Self.Dispositivi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Utenti">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Dispositivi">
+              <PropertyRef Name="FKUtente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKFotoMedia">
+          <End Role="Media" Type="Self.Media" Multiplicity="1" />
+          <End Role="Foto" Type="Self.Foto" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Media">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Foto">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKFotoMediaV">
+          <End Role="Media" Type="Self.Media" Multiplicity="1" />
+          <End Role="Video" Type="Self.Video" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Media">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Video">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKMediaDispositivi">
+          <End Role="Dispositivi" Type="Self.Dispositivi" Multiplicity="1" />
+          <End Role="Media" Type="Self.Media" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dispositivi">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Media">
+              <PropertyRef Name="FKDispositivo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SaveMyPhotoModelStoreContainer">
+          <EntitySet Name="Dispositivi" EntityType="Self.Dispositivi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Media" EntityType="Self.Media" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Utenti" EntityType="Self.Utenti" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Foto" EntityType="Self.Foto" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Foto].[ID] AS [ID], 
+    [Foto].[Flash] AS [Flash]
+    FROM [dbo].[Foto] AS [Foto]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Video" EntityType="Self.Video" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Video].[ID] AS [ID], 
+    [Video].[Durata] AS [Durata]
+    FROM [dbo].[Video] AS [Video]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FKDispositiviUtenti" Association="Self.FKDispositiviUtenti">
+            <End Role="Utenti" EntitySet="Utenti" />
+            <End Role="Dispositivi" EntitySet="Dispositivi" />
+          </AssociationSet>
+          <AssociationSet Name="FKFotoMedia" Association="Self.FKFotoMedia">
+            <End Role="Media" EntitySet="Media" />
+            <End Role="Foto" EntitySet="Foto" />
+          </AssociationSet>
+          <AssociationSet Name="FKFotoMediaV" Association="Self.FKFotoMediaV">
+            <End Role="Media" EntitySet="Media" />
+            <End Role="Video" EntitySet="Video" />
+          </AssociationSet>
+          <AssociationSet Name="FKMediaDispositivi" Association="Self.FKMediaDispositivi">
+            <End Role="Dispositivi" EntitySet="Dispositivi" />
+            <End Role="Media" EntitySet="Media" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SaveMyPhotoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Dispositivi">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Marca" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Modello" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="VersioneAndroid" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SpazioLibero" Type="Int32" Nullable="false" />
+          <Property Name="FKUtente" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Utenti" Relationship="Self.FKDispositiviUtenti" FromRole="Dispositivi" ToRole="Utenti" />
+          <NavigationProperty Name="Media" Relationship="Self.FKMediaDispositivi" FromRole="Dispositivi" ToRole="Media" />
+        </EntityType>
+        <EntityType Name="Media">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Album" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DataAcquisizione" Type="DateTime" annotation:StoreGeneratedPattern="None" Precision="3" />
+          <Property Name="Dimensione" Type="Int32" Nullable="false" />
+          <Property Name="Percorso" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Altezza" Type="Int32" />
+          <Property Name="Larghezza" Type="Int32" />
+          <Property Name="Formato" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Orientamento" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="GpsLat" Type="Decimal" Precision="10" Scale="6" />
+          <Property Name="GpsLong" Type="Decimal" Precision="10" Scale="6" />
+          <Property Name="Dispositivo" Type="Boolean" />
+          <Property Name="FKDispositivo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Dispositivi" Relationship="Self.FKMediaDispositivi" FromRole="Media" ToRole="Dispositivi" />
+          <NavigationProperty Name="Foto" Relationship="Self.FKFotoMedia" FromRole="Media" ToRole="Foto" />
+          <NavigationProperty Name="Video" Relationship="Self.FKFotoMediaV" FromRole="Media" ToRole="Video" />
+        </EntityType>
+        <EntityType Name="Utenti">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NomeUtente" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DataNascita" Type="DateTime" Precision="3" />
+          <Property Name="Mail" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="32" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Dispositivi" Relationship="Self.FKDispositiviUtenti" FromRole="Utenti" ToRole="Dispositivi" />
+        </EntityType>
+        <EntityType Name="Foto">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Nullable="false" Type="Int32" />
+          <Property Name="Flash" Type="Boolean" />
+          <NavigationProperty Name="Media" Relationship="Self.FKFotoMedia" FromRole="Foto" ToRole="Media" />
+        </EntityType>
+        <EntityType Name="Video">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Nullable="false" Type="Int32" />
+          <Property Name="Durata" Type="Int32" />
+          <NavigationProperty Name="Media" Relationship="Self.FKFotoMediaV" FromRole="Video" ToRole="Media" />
+        </EntityType>
+        <Association Name="FKDispositiviUtenti">
+          <End Role="Utenti" Type="Self.Utenti" Multiplicity="1" />
+          <End Role="Dispositivi" Type="Self.Dispositivi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Utenti">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Dispositivi">
+              <PropertyRef Name="FKUtente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKMediaDispositivi">
+          <End Role="Dispositivi" Type="Self.Dispositivi" Multiplicity="1" />
+          <End Role="Media" Type="Self.Media" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dispositivi">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Media">
+              <PropertyRef Name="FKDispositivo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKFotoMedia">
+          <End Type="Self.Media" Multiplicity="1" Role="Media" />
+          <End Type="Self.Foto" Multiplicity="0..1" Role="Foto" />
+          <ReferentialConstraint>
+            <Principal Role="Media">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Foto">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKFotoMediaV">
+          <End Type="Self.Media" Multiplicity="1" Role="Media" />
+          <End Type="Self.Video" Multiplicity="0..1" Role="Video" />
+          <ReferentialConstraint>
+            <Principal Role="Media">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Video">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SaveMyPhotoEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Dispositivi" EntityType="Self.Dispositivi" />
+          <EntitySet Name="Media" EntityType="Self.Media" />
+          <EntitySet Name="Utenti" EntityType="Self.Utenti" />
+          <EntitySet Name="Foto" EntityType="Self.Foto" />
+          <EntitySet Name="Video" EntityType="Self.Video" />
+          <AssociationSet Name="FKDispositiviUtenti" Association="Self.FKDispositiviUtenti">
+            <End Role="Utenti" EntitySet="Utenti" />
+            <End Role="Dispositivi" EntitySet="Dispositivi" />
+          </AssociationSet>
+          <AssociationSet Name="FKMediaDispositivi" Association="Self.FKMediaDispositivi">
+            <End Role="Dispositivi" EntitySet="Dispositivi" />
+            <End Role="Media" EntitySet="Media" />
+          </AssociationSet>
+          <AssociationSet Name="FKFotoMedia" Association="Self.FKFotoMedia">
+            <End EntitySet="Media" Role="Media" />
+            <End EntitySet="Foto" Role="Foto" />
+          </AssociationSet>
+          <AssociationSet Name="FKFotoMediaV" Association="Self.FKFotoMediaV">
+            <End EntitySet="Media" Role="Media" />
+            <End EntitySet="Video" Role="Video" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SaveMyPhotoModelStoreContainer" CdmEntityContainer="SaveMyPhotoEntities">
+          <EntitySetMapping Name="Dispositivi">
+            <EntityTypeMapping TypeName="SaveMyPhotoModel.Dispositivi">
+              <MappingFragment StoreEntitySet="Dispositivi">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Modello" ColumnName="Modello" />
+                <ScalarProperty Name="VersioneAndroid" ColumnName="VersioneAndroid" />
+                <ScalarProperty Name="SpazioLibero" ColumnName="SpazioLibero" />
+                <ScalarProperty Name="FKUtente" ColumnName="FKUtente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Media">
+            <EntityTypeMapping TypeName="SaveMyPhotoModel.Media">
+              <MappingFragment StoreEntitySet="Media">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Album" ColumnName="Album" />
+                <ScalarProperty Name="DataAcquisizione" ColumnName="DataAcquisizione" />
+                <ScalarProperty Name="Dimensione" ColumnName="Dimensione" />
+                <ScalarProperty Name="Percorso" ColumnName="Percorso" />
+                <ScalarProperty Name="Altezza" ColumnName="Altezza" />
+                <ScalarProperty Name="Larghezza" ColumnName="Larghezza" />
+                <ScalarProperty Name="Formato" ColumnName="Formato" />
+                <ScalarProperty Name="Orientamento" ColumnName="Orientamento" />
+                <ScalarProperty Name="GpsLat" ColumnName="GpsLat" />
+                <ScalarProperty Name="GpsLong" ColumnName="GpsLong" />
+                <ScalarProperty Name="Dispositivo" ColumnName="Dispositivo" />
+                <ScalarProperty Name="FKDispositivo" ColumnName="FKDispositivo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Utenti">
+            <EntityTypeMapping TypeName="SaveMyPhotoModel.Utenti">
+              <MappingFragment StoreEntitySet="Utenti">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NomeUtente" ColumnName="NomeUtente" />
+                <ScalarProperty Name="DataNascita" ColumnName="DataNascita" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Foto">
+            <EntityTypeMapping TypeName="SaveMyPhotoModel.Foto">
+              <MappingFragment StoreEntitySet="Foto">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Flash" ColumnName="Flash" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Video">
+            <EntityTypeMapping TypeName="SaveMyPhotoModel.Video">
+              <MappingFragment StoreEntitySet="Video">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Durata" ColumnName="Durata" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Nessuno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
