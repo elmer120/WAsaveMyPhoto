@@ -195,7 +195,7 @@ namespace WAsaveMyphoto
                                      where u.NomeUtente == nomeUtente
                                      select u).First();
                     //password corretta?
-                    if (utente.Password == password)
+                    if (utente.Password == Servizi.md5(password))
                     {
                         return true;
                     }
@@ -275,19 +275,18 @@ namespace WAsaveMyphoto
         public int RegistrazioneNuovoUtente(String nomeUtente, String mail, String password, String marca, String modello, String versioneAndroid, int spazioLibero)
         {
 
-
             //se l'utente non esiste già
             if (!UtenteCheck(nomeUtente))
             {
                 this.CreaContesto();
-               
+
                 //aggiungo il nuovo utente
                 Utenti utente = this.ctx.Utenti.Add(new Utenti()
                 {
                     NomeUtente = nomeUtente,
                     //DATA NASCITA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     Mail = mail,
-                    Password = password
+                    Password = Servizi.md5(password)
                 });
 
 
@@ -307,32 +306,33 @@ namespace WAsaveMyphoto
         /// <param name="nomeFile"></param>
         /// <returns></returns>
         [WebMethod]
-        public bool AggiungiMedia(String nomeFile,String album,int dimensione,String nomeUtente,int altezza,int larghezza,String formato,String orientamento,int gpsLat,int gpsLong,int fkDispositivo)
+        public bool AggiungiMedia(String nomeFile,String album,DateTime dataAcquisizione,int dimensione,String nomeUtente,int altezza,int larghezza,String formato,String orientamento,int gpsLat,int gpsLong,int fkDispositivo)
         {
             CreaContesto();
             
             //recupero il percorso dove è stato salvato
             String percorsoAssoluto = "Media" + "\\" + nomeUtente + "\\" + fkDispositivo + "\\" + "Foto";
-            percorsoAssoluto = Server.MapPath(percorsoAssoluto);
+
 
             //creo il nuovo record e imposto che il media è ancora presente sul dispositivo
             Media media = this.ctx.Media.Add(new Media()
             {
                 Nome = nomeFile,
                 Album = album,
-                DataAcquisizione = DateTime.Now,
+                DataAcquisizione = dataAcquisizione,
                 Dimensione = dimensione,
                 Percorso = percorsoAssoluto,
                 Altezza = altezza,
                 Larghezza = larghezza,
                 Formato = formato,
-                Orientamento = orientamento,
+                Orientamento = Convert.ToInt32(orientamento),
                 GpsLat = gpsLat,
                 GpsLong = gpsLong,
                 Dispositivo = true,
                 FKDispositivo = fkDispositivo,
             });
 
+            //SaveChanges(ctx);
             //salvo i cambiamenti
             if (ctx.SaveChanges() > 0)
             {
@@ -361,6 +361,7 @@ namespace WAsaveMyphoto
                            select Media).First();
             //imposto che il media non è più presente sul dispositivo
             media.Dispositivo = false;
+
             //salvo i cambiamenti
             if(ctx.SaveChanges() > 0)
             {

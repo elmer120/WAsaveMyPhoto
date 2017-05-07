@@ -17,13 +17,13 @@ namespace WAsaveMyphoto
         public int ID { get; set; }
         public string Nome { get; set; }
         public string Album { get; set; }
-        public System.DateTime DataAcquisizione { get; set; }
+        public Nullable<System.DateTime> DataAcquisizione { get; set; }
         public int Dimensione { get; set; }
         public string Percorso { get; set; }
-        public int Altezza { get; set; }
-        public int Larghezza { get; set; }
+        public Nullable<int> Altezza { get; set; }
+        public Nullable<int> Larghezza { get; set; }
         public string Formato { get; set; }
-        public string Orientamento { get; set; }
+        public Nullable<int> Orientamento { get; set; }
         public Nullable<decimal> GpsLat { get; set; }
         public Nullable<decimal> GpsLong { get; set; }
         public Nullable<bool> Dispositivo { get; set; }

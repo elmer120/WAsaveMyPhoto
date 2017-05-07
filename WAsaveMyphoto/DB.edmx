@@ -31,14 +31,14 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Sa
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nome" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="Album" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="Album" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="DataAcquisizione" Type="datetime" />
           <Property Name="Dimensione" Type="int" Nullable="false" />
           <Property Name="Percorso" Type="nvarchar" MaxLength="1024" Nullable="false" />
           <Property Name="Altezza" Type="int" />
           <Property Name="Larghezza" Type="int" />
           <Property Name="Formato" Type="nvarchar" MaxLength="15" Nullable="false" />
-          <Property Name="Orientamento" Type="char" MaxLength="1" />
+          <Property Name="Orientamento" Type="int" />
           <Property Name="GpsLat" Type="decimal" Precision="10" Scale="6" />
           <Property Name="GpsLong" Type="decimal" Precision="10" Scale="6" />
           <Property Name="Dispositivo" Type="bit" />
@@ -167,14 +167,14 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Sa
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nome" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Album" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Album" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="DataAcquisizione" Type="DateTime" annotation:StoreGeneratedPattern="None" Precision="3" />
           <Property Name="Dimensione" Type="Int32" Nullable="false" />
           <Property Name="Percorso" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Altezza" Type="Int32" />
           <Property Name="Larghezza" Type="Int32" />
           <Property Name="Formato" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Orientamento" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Orientamento" Type="Int32" />
           <Property Name="GpsLat" Type="Decimal" Precision="10" Scale="6" />
           <Property Name="GpsLong" Type="Decimal" Precision="10" Scale="6" />
           <Property Name="Dispositivo" Type="Boolean" />

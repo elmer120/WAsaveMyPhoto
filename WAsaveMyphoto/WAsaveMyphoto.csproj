@@ -76,6 +76,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="foto.css" />
     <Content Include="packages.config" />
     <EntityDeploy Include="DB.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -106,6 +107,7 @@
       <LastGenOutput>DB.cs</LastGenOutput>
     </Content>
     <Content Include="Web.config" />
+    <Content Include="WFfoto.aspx" />
     <Content Include="WFupload.aspx" />
     <Content Include="WSsaveMyPhoto.asmx" />
   </ItemGroup>
@@ -135,11 +137,19 @@
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Servizi.cs" />
     <Compile Include="Utenti.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Video.cs">
       <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WFfoto.aspx.cs">
+      <DependentUpon>WFfoto.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WFfoto.aspx.designer.cs">
+      <DependentUpon>WFfoto.aspx</DependentUpon>
     </Compile>
     <Compile Include="WFupload.aspx.cs">
       <DependentUpon>WFupload.aspx</DependentUpon>
