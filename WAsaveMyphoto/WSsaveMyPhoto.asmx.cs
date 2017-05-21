@@ -95,7 +95,7 @@ namespace WAsaveMyphoto
 
 
         /// <summary>
-        /// Registra un nuovo dispositivo ad un nuovo utente
+        /// Associa un nuovo dispositivo a un utente già presente
         /// </summary>
         /// <param name="macAddr"></param>
         /// <param name="marca"></param>
@@ -103,7 +103,7 @@ namespace WAsaveMyphoto
         /// <param name="versioneAndroid"></param>
         /// <param name="spazioLibero"></param>
         /// <param name="fkUtente"></param>
-        /// <returns></returns>
+        /// <returns>FkDispositivo</returns>
 
         private int RegistrazioneNuovoDispositivo(String marca, String modello, String versioneAndroid, int spazioLibero, int fkUtente)
         {
@@ -167,9 +167,6 @@ namespace WAsaveMyphoto
                 ); // Add the original exception as the innerException
             }
         }
-
-
-
 
         //----------------------------------ACCEDI--------------------------------------------------------------------------
 
@@ -260,7 +257,7 @@ namespace WAsaveMyphoto
 
         //----------------------------------REGISTRAZIONE-------------------------------------------------------------------------
         /// <summary>
-        /// Registra un nuovo utente inserendo utente e relativo dispositivo nel database
+        /// Registra un nuovo utente nel db
         /// </summary>
         /// <param name="nomeUtente"></param>
         /// <param name="mail"></param>
@@ -270,7 +267,7 @@ namespace WAsaveMyphoto
         /// <param name="modello"></param>
         /// <param name="versioneAndroid"></param>
         /// <param name="spazioLibero"></param>
-        /// <returns></returns>
+        /// <returns>fkDispositivo</returns>
         [WebMethod]
         public int RegistrazioneNuovoUtente(String nomeUtente, String mail, String password, String marca, String modello, String versioneAndroid, int spazioLibero)
         {
@@ -311,7 +308,7 @@ namespace WAsaveMyphoto
             CreaContesto();
             
             //recupero il percorso dove è stato salvato
-            String percorsoAssoluto = "Media" + "\\" + nomeUtente + "\\" + fkDispositivo + "\\" + "Foto";
+            String percorso = "Media" + "\\" + nomeUtente + "\\" + nomeFile;
 
 
             //creo il nuovo record e imposto che il media è ancora presente sul dispositivo
@@ -321,7 +318,7 @@ namespace WAsaveMyphoto
                 Album = album,
                 DataAcquisizione = dataAcquisizione,
                 Dimensione = dimensione,
-                Percorso = percorsoAssoluto,
+                Percorso = percorso,
                 Altezza = altezza,
                 Larghezza = larghezza,
                 Formato = formato,
@@ -332,7 +329,7 @@ namespace WAsaveMyphoto
                 FKDispositivo = fkDispositivo,
             });
 
-            //SaveChanges(ctx);
+            
             //salvo i cambiamenti
             if (ctx.SaveChanges() > 0)
             {
@@ -370,6 +367,74 @@ namespace WAsaveMyphoto
 
             return false;
         }
+
+
+        /// <summary>
+        /// Ritorna la lista dei percorsi dei media di tutti i dispositivi tranne quelli che ci sono già sul dispositivo
+        /// </summary>
+        /// <param name="nomeUtente"></param>
+        /// <param name="nomeFile"></param>
+        /// <returns></returns>
+        [WebMethod]
+        public List<String> CheckMediaOnServer(String nomeUtente, int idDispositivo)
+        {
+            CreaContesto();
+            List<String> listMedia = new List<String>();
+            //recupero tutti i dispositivi dell'utente
+            int idUtente = (from u in ctx.Utenti
+                            where u.NomeUtente == nomeUtente
+                            select u.ID).FirstOrDefault();
+
+            var dispositivi = from d in ctx.Dispositivi
+                              where d.FKUtente == idUtente
+                              select d;
+
+            if (dispositivi != null)
+            {
+                //per ogni dispositivo
+                foreach (var dispositivo in dispositivi)
+                {
+                    //per gli altri dispositivi recupero tutti i media
+                    if (dispositivo.ID != idDispositivo)
+                    {
+                        //recupero i media
+                        var medias = (from m in ctx.Media
+                                      where m.FKDispositivo == dispositivo.ID
+                                      select m).ToList();
+
+                        if (medias != null)
+                        {
+                            //per ogni media
+                            foreach (var media in medias)
+                            {
+                                listMedia.Add(media.Percorso);
+                            }
+                        }
+                    }
+                    //per il dispositivo che fa richesta della lista recupero solo quelle che sono solo sul server
+                    else
+                    {
+                        //recupero i media che hanno dispositivo a 0
+                        var medias = (from m in ctx.Media
+                                      where m.FKDispositivo == dispositivo.ID
+                                      && m.Dispositivo==false
+                                      select m).ToList();
+
+                        if (medias != null)
+                        {
+                            //per ogni media
+                            foreach (var media in medias)
+                            {
+                                listMedia.Add(media.Percorso);
+                            }
+                        }
+                    }
+                }
+                return listMedia;
+            }
+            return listMedia;
+        }
+ 
 
         //-------------------------------------FINE GESTIONE MEDIA-----------------------------------------------------------------------
 
@@ -420,6 +485,12 @@ namespace WAsaveMyphoto
 
         [WebMethod]
         public string HelloWorldTestTest()
+        {
+            return "Hello World";
+        }
+
+        [WebMethod]
+        public string HelloWorldTestTestTest()
         {
             return "Hello World";
         }

@@ -56,8 +56,9 @@ namespace WAsaveMyphoto
 
                         //recupero tutti i dispositivi dell'utente
                         var dispositivi = from d in ctx.Dispositivi
-                                          where d.ID==utente.ID
+                                          where d.FKUtente==utente.ID
                                           select d;
+                
                         //per ogni dispositivo
                         foreach (var dispositivo in dispositivi)
                         {
@@ -65,12 +66,12 @@ namespace WAsaveMyphoto
                             tb = new Table();
                             //imposto stile tb
                             tb.Style.Add("border", "1px solid black");
-                           
-                            tb.CellPadding = 5;
-                            
-                            tb.GridLines = GridLines.Both;
-                            tb.ID = utente.ID.ToString();
 
+                            tb.CellPadding = 5;
+                            tb.HorizontalAlign = HorizontalAlign.Justify;
+                            tb.GridLines = GridLines.Both;
+                            tb.ID = 'd'+dispositivo.ID.ToString();
+            
                             //creo la riga
                             tr = new TableRow();
                             tr.Cells.Add(new TableHeaderCell() { Text = "ID" });
@@ -103,7 +104,7 @@ namespace WAsaveMyphoto
                                         tb.CellPadding = 5;
                                         tb.HorizontalAlign = HorizontalAlign.Justify;
                                         tb.GridLines = GridLines.Both;
-                                        tb.ID = utente.ID.ToString();
+                                        tb.ID = 'm'+media.ID.ToString();
 
                                         //creo la riga
                                         tr = new TableRow();
@@ -125,7 +126,7 @@ namespace WAsaveMyphoto
                                             tr.Cells.Add(new TableCell() { Text = media.Altezza.ToString() });
                                             tr.Cells.Add(new TableCell() { Text = media.Larghezza.ToString() });
                                             tr.Cells.Add(new TableCell() { Text = media.Orientamento.ToString() });
-                                            tr.Cells.Add(new TableCell() { Text = "<img src='" + media.Percorso+"\\"+media.Nome+"'"+"style='width:20%; height:auto;'" });
+                                            tr.Cells.Add(new TableCell() { Text = "<img src='" + media.Percorso+"'"+"style='width:20%; height:auto;'" });
                                             //aggiungo la riga
                                             tb.Rows.Add(tr);
                                             //AGG TABELLA AL DIV
