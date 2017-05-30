@@ -303,7 +303,7 @@ namespace WAsaveMyphoto
         /// <param name="nomeFile"></param>
         /// <returns></returns>
         [WebMethod]
-        public bool AggiungiMedia(String nomeFile,String album,DateTime dataAcquisizione,int dimensione,String nomeUtente,int altezza,int larghezza,String formato,String orientamento,int gpsLat,int gpsLong,int fkDispositivo)
+        public bool AggiungiMedia(String nomeFile,String album,DateTime dataAcquisizione,int dimensione,String nomeUtente,int altezza,int larghezza,String formato,String orientamento,Double gpsLat,Double gpsLong,int fkDispositivo)
         {
             CreaContesto();
             
@@ -323,8 +323,8 @@ namespace WAsaveMyphoto
                 Larghezza = larghezza,
                 Formato = formato,
                 Orientamento = Convert.ToInt32(orientamento),
-                GpsLat = gpsLat,
-                GpsLong = gpsLong,
+                GpsLat = (decimal)gpsLat,
+                GpsLong = (decimal)gpsLong,
                 Dispositivo = true,
                 FKDispositivo = fkDispositivo,
             });
@@ -370,7 +370,7 @@ namespace WAsaveMyphoto
 
 
         /// <summary>
-        /// Ritorna la lista dei percorsi dei media di tutti i dispositivi tranne quelli che ci sono già sul dispositivo
+        /// Ritorna la lista dei media di tutti i dispositivi tranne quelli che ci sono già sul dispositivo
         /// </summary>
         /// <param name="nomeUtente"></param>
         /// <param name="nomeFile"></param>
@@ -407,7 +407,16 @@ namespace WAsaveMyphoto
                             //per ogni media
                             foreach (var media in medias)
                             {
+                                listMedia.Add(media.DataAcquisizione.ToString());
                                 listMedia.Add(media.Percorso);
+                                listMedia.Add(media.Nome);
+                                listMedia.Add(media.Formato);
+                                listMedia.Add(media.Dimensione.ToString());
+                                listMedia.Add(media.Altezza.ToString());
+                                listMedia.Add(media.Larghezza.ToString());
+                                listMedia.Add(media.Orientamento.ToString());
+                                listMedia.Add(media.GpsLat.ToString());
+                                listMedia.Add(media.GpsLong.ToString());
                             }
                         }
                     }
@@ -425,7 +434,16 @@ namespace WAsaveMyphoto
                             //per ogni media
                             foreach (var media in medias)
                             {
+                                listMedia.Add(media.DataAcquisizione.ToString());
                                 listMedia.Add(media.Percorso);
+                                listMedia.Add(media.Nome);
+                                listMedia.Add(media.Formato);
+                                listMedia.Add(media.Dimensione.ToString());
+                                listMedia.Add(media.Altezza.ToString());
+                                listMedia.Add(media.Larghezza.ToString());
+                                listMedia.Add(media.Orientamento.ToString());
+                                listMedia.Add(media.GpsLat.ToString());
+                                listMedia.Add(media.GpsLong.ToString());
                             }
                         }
                     }
