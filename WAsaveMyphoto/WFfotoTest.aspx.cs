@@ -7,84 +7,61 @@ using System.Web.UI.WebControls;
 
 namespace WAsaveMyphoto
 {
-    public partial class WFfoto : System.Web.UI.Page
+    public partial class WFfotoTest : System.Web.UI.Page
     {
         SaveMyPhotoEntities ctx;
-        int utenteId;
-
-        public int UtenteId
-        {
-            get
-            {
-                return utenteId;
-            }
-
-            set
-            {
-                utenteId = value;
-            }
-        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //se è autenticato
-            if (Session["id"] != null)
-            {
-                this.UtenteId = (int)Session["id"];
-                getMedia(this.UtenteId);
-            }
-            else
-            {
-                Response.Redirect("./Index.aspx");
-            }
-            
+            getAllFoto();
         }
 
-        private void getMedia(int utenteId)
+        private void getAllFoto()
         {
             CreaContesto();
 
+            //recupero tutti gli utenti
+            var utenti = from c in ctx.Utenti
+                         select c;
 
+            //per ogni utente
+            foreach (Utenti utente in utenti)
+            {
+                //creo la tabella
+                Table tb = new Table();
+                //imposto stile tb
+                tb.Style.Add("border", "1px solid black");
+                
+                tb.CellPadding = 5;
+                tb.HorizontalAlign = HorizontalAlign.Justify;
+                tb.GridLines = GridLines.Both;
+                tb.ID = utente.ID.ToString();
 
-            ////per ogni utente
-            //foreach (Utenti utente in utenti)
-            //{
+                //aggiungo nuova riga
+                TableRow tr = new TableRow();
 
-            //    //imposto stile tb
-            //    tb.Style.Add("border", "1px solid black");
+                tr.Cells.Add(new TableHeaderCell(){Text = "ID"});
+                tr.Cells.Add(new TableHeaderCell(){Text = "NomeUtente"});
 
-            //    tb.CellPadding = 5;
-            //    tb.HorizontalAlign = HorizontalAlign.Justify;
-            //    tb.GridLines = GridLines.Both;
-            //    tb.ID = utente.ID.ToString();
+                tb.Rows.Add(tr);
+                    //aggiungo il contenuto
+                    //creo nuova riga
+                    tr = new TableRow();
+                    tr.Cells.Add(new TableCell(){Text = utente.ID.ToString()});
+                    tr.Cells.Add(new TableCell(){Text = utente.NomeUtente});
+                    //aggiungo nuova riga
+                    tb.Rows.Add(tr);
+                    //AGG TABELLA AL DIV
+                    divFoto.Controls.Add(tb);
 
-            //    //aggiungo nuova riga
-            //    TableRow tr = new TableRow();
-
-            //    tr.Cells.Add(new TableHeaderCell(){Text = "ID"});
-            //    tr.Cells.Add(new TableHeaderCell(){Text = "NomeUtente"});
-
-            //    tb.Rows.Add(tr);
-            //        //aggiungo il contenuto
-            //        //creo nuova riga
-            //        tr = new TableRow();
-            //        tr.Cells.Add(new TableCell(){Text = utente.ID.ToString()});
-            //        tr.Cells.Add(new TableCell(){Text = utente.NomeUtente});
-            //        //aggiungo nuova riga
-            //        tb.Rows.Add(tr);
-            //        //AGG TABELLA AL DIV
-            //        divFoto.Controls.Add(tb);
-
-            //recupero tutti i dispositivi dell'utente
-            var dispositivi = from d in ctx.Dispositivi
-                              where d.FKUtente==utenteId
-                              select d;
+                        //recupero tutti i dispositivi dell'utente
+                        var dispositivi = from d in ctx.Dispositivi
+                                          where d.FKUtente==utente.ID
+                                          select d;
                 
                         //per ogni dispositivo
                         foreach (var dispositivo in dispositivi)
                         {
-                            //creo la tabella
-                            Table tb = new Table();
                             //imposto gli header per la tb dispositivo
                             tb = new Table();
                             //imposto stile tb
@@ -94,9 +71,7 @@ namespace WAsaveMyphoto
                             tb.HorizontalAlign = HorizontalAlign.Justify;
                             tb.GridLines = GridLines.Both;
                             tb.ID = 'd'+dispositivo.ID.ToString();
-
-                            //aggiungo nuova riga
-                            TableRow tr = new TableRow();
+            
                             //creo la riga
                             tr = new TableRow();
                             tr.Cells.Add(new TableHeaderCell() { Text = "ID" });
@@ -112,7 +87,7 @@ namespace WAsaveMyphoto
                             //aggiungo la riga
                             tb.Rows.Add(tr);
                             //AGG TABELLA AL DIV
-                            divMedia.Controls.Add(tb);
+                            divFoto.Controls.Add(tb);
 
                                     //recupero tutti i media del dispositivo
                                     var medias = from m in ctx.Media
@@ -155,9 +130,13 @@ namespace WAsaveMyphoto
                                             //aggiungo la riga
                                             tb.Rows.Add(tr);
                                             //AGG TABELLA AL DIV
-                                            divMedia.Controls.Add(tb);
+                                            divFoto.Controls.Add(tb);
                                     }
-                        } 
+                    
+                        }
+                       
+            }
+
         }
 
         private void CreaContesto()

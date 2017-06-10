@@ -22,15 +22,6 @@ namespace WAsaveMyphoto {
         protected global::System.Web.UI.HtmlControls.HtmlForm login;
         
         /// <summary>
-        /// Controllo lblUsername.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblUsername;
-        
-        /// <summary>
         /// Controllo txtUsername.
         /// </summary>
         /// <remarks>
@@ -38,15 +29,6 @@ namespace WAsaveMyphoto {
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtUsername;
-        
-        /// <summary>
-        /// Controllo lblPassword.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPassword;
         
         /// <summary>
         /// Controllo txtPassword.
@@ -58,15 +40,6 @@ namespace WAsaveMyphoto {
         protected global::System.Web.UI.WebControls.TextBox txtPassword;
         
         /// <summary>
-        /// Controllo btnAccedi.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAccedi;
-        
-        /// <summary>
         /// Controllo lblError.
         /// </summary>
         /// <remarks>
@@ -74,5 +47,14 @@ namespace WAsaveMyphoto {
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblError;
+        
+        /// <summary>
+        /// Controllo btnAccedi.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAccedi;
     }
 }

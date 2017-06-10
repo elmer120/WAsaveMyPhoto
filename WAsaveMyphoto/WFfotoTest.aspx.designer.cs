@@ -10,25 +10,25 @@
 namespace WAsaveMyphoto {
     
     
-    public partial class WFfoto {
+    public partial class WFfotoTest {
         
         /// <summary>
-        /// Controllo form.
+        /// Controllo form1.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form;
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// Controllo divMedia.
+        /// Controllo divFoto.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divMedia;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divFoto;
         
         /// <summary>
         /// Controllo tUtenti.

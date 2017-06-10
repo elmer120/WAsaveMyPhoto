@@ -11,7 +11,7 @@ namespace WAsaveMyphoto
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["username"]!=null)
+            if (Session["id"]!=null)
             {
                 Response.Redirect("./Logout.aspx");
             }
@@ -19,7 +19,7 @@ namespace WAsaveMyphoto
 
         public void btnAccedi_click (object sender,EventArgs a)
         {
-
+           
             String username = txtUsername.Text;
             String password = Servizi.md5(txtPassword.Text);
 
@@ -27,16 +27,16 @@ namespace WAsaveMyphoto
             {
                 try
                 {
-                    var utenti = (from u in ctx.Utenti
+                    var utenteId = (from u in ctx.Utenti
                                   where u.NomeUtente == username
                                   && u.Password == password
-                                  select u).First();
+                                  select u.ID).First();
 
-                    Session["username"] = utenti.NomeUtente;
+                    Session["id"] = utenteId;
                     Response.Redirect("./WFfoto.aspx");
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
 
                     lblError.Text = "Username o password errati!";
