@@ -33,7 +33,7 @@ namespace WAsaveMyphoto
                                   select u.ID).First();
 
                     Session["id"] = utenteId;
-                    Response.Redirect("./WFfoto.aspx");
+                    Response.Redirect("./WFfoto.aspx?id=-1");
 
                 }
                 catch (Exception ex)

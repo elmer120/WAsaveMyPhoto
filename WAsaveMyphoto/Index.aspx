@@ -16,7 +16,7 @@
             
             <div class="form-login text-center">
                 <h3>Accedi</h3>
-
+                 <img src="images/logo.png" alt="Avatar" class="avatar" height="250" width="250">
             <form id="login" runat="server">
                 <asp:Textbox id="txtUsername" runat="server" CssClass="form-control input-sm chat-input" placeholder="nome utente"></asp:Textbox>
                 <br/>

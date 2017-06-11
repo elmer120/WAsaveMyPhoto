@@ -13,6 +13,24 @@ namespace WAsaveMyphoto {
     public partial class WFfoto {
         
         /// <summary>
+        /// Controllo navMenu.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl navMenu;
+        
+        /// <summary>
+        /// Controllo galleria.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl galleria;
+        
+        /// <summary>
         /// Controllo form.
         /// </summary>
         /// <remarks>

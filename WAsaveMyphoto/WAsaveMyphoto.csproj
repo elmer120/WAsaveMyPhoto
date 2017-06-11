@@ -82,15 +82,7 @@
     <Content Include="bootstrap3.3.7\js\bootstrap.js" />
     <Content Include="bootstrap3.3.7\js\bootstrap.min.js" />
     <Content Include="foto.css" />
-    <Content Include="images\benches.jpg" />
-    <Content Include="images\bridge.jpg" />
-    <Content Include="images\coast.jpg" />
-    <Content Include="images\park.jpg" />
-    <Content Include="images\rails.jpg" />
-    <Content Include="images\rocks.jpg" />
-    <Content Include="images\sky.jpg" />
-    <Content Include="images\traffic.jpg" />
-    <Content Include="images\tunnel.jpg" />
+    <Content Include="images\logo.png" />
     <Content Include="Index.aspx" />
     <Content Include="Logout.aspx" />
     <Content Include="packages.config" />
